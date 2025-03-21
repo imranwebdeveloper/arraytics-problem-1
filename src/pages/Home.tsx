@@ -2,22 +2,23 @@ import { useEffect } from "react";
 import planData from "../assets/plan.json";
 import { useDispatch } from "react-redux";
 import { setPlan } from "../features/planSlice";
-import { useAppSelector } from "../store/reduxStore";
+import PlanTab from "../components/PlanTab";
+import PlanList from "../components/PlanList";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { plan } = useAppSelector((state) => state.plan);
-  // After get the plan from the API set the plan in the store
+
+  // After get the plan data from the API set the plan in the store
   useEffect(() => {
     dispatch(setPlan(planData));
   }, [dispatch]);
 
-  const planInfo = Object.values(plan?.plansInfo || {});
-  console.log(planInfo);
-
   return (
     <div>
       <h1>Home</h1>
+      <p>30-Day Refund Policy | Cancel Anytime</p>
+      <PlanTab />
+      <PlanList />
     </div>
   );
 };
