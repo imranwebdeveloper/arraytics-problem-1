@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const AddProductForm = React.memo(({ addProduct }) => {
+const AddProductForm = ({ addProduct }) => {
   // Remove  multiple states
   const [formData, setFormData] = useState({ name: "", price: "" });
 
@@ -50,6 +50,6 @@ const AddProductForm = React.memo(({ addProduct }) => {
       <button type="submit">Add Product</button>
     </form>
   );
-});
+};
 
 export default AddProductForm;

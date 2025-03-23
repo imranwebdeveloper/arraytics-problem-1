@@ -9,7 +9,7 @@ const PlanTab = () => {
   return (
     <TabContainer>
       {planInfo.map((item, index) => (
-        <ButtonContainer>
+        <ButtonContainer key={index}>
           <PlanButton
             key={item.type}
             selected={selectedPlan === item.type}
@@ -18,7 +18,6 @@ const PlanTab = () => {
             {item.title}
           </PlanButton>
 
-          {index === 0 && <Divider />}
           {item.discount && <DiscountBadge>{item.discount}</DiscountBadge>}
         </ButtonContainer>
       ))}
@@ -32,7 +31,7 @@ export default PlanTab;
 const TabContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  /* gap: 12px; */
   padding: 12px;
   justify-content: center;
 `;
@@ -40,21 +39,22 @@ const TabContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
   padding: 12px;
   justify-content: center;
+  font-size: 16px;
 `;
 
 const PlanButton = styled.button<{ selected: boolean }>`
-  font-size: 16px;
   font-weight: ${({ selected }) => (selected ? "bold" : "normal")};
-  color: ${({ selected }) => (selected ? "#8A4FFF" : "#333")};
+  color: ${({ selected }) => (selected ? "#8A4FFF" : "inherit")};
   border: none;
   background: none;
   cursor: pointer;
   position: relative;
   padding-bottom: 4px;
   transition: color 0.3s ease-in-out;
+  font-size: 16px;
 
   &:hover {
     color: #8a4fff;
@@ -75,18 +75,11 @@ const PlanButton = styled.button<{ selected: boolean }>`
   `}
 `;
 
-const Divider = styled.div`
-  width: 1px;
-  height: 20px;
-  background: #ddd;
-`;
-
 const DiscountBadge = styled.span`
   background: rgba(138, 79, 255, 0.1);
   color: #8a4fff;
-  font-size: 14px;
   font-weight: bold;
-  padding: 6px 12px;
+  padding: 4px 8px;
   border-radius: 16px;
   display: flex;
   align-items: center;

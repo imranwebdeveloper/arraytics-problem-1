@@ -10,8 +10,8 @@ interface TooltipProps {
 const TooltipWrapper = styled.div`
   position: relative;
   cursor: pointer;
-  /* display: flex;
-  align-items: center; */
+  display: flex;
+  align-items: center;
 `;
 
 const TooltipText = styled.div<{ position: string; visible: boolean }>`

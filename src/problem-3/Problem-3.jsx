@@ -13,7 +13,7 @@ import React from "react";
 
 /** ---------------Solution 1---------------
  *
- * Using inline styles
+ * Used inline styles
  * fixed icon
  * fixed button attributes
  * Not manage button attributes
@@ -42,9 +42,9 @@ export const Button = ({
 
 /** ------------------Solution 2---------------
  *
- * Using class styles
- * Use fixable icon
- * Manage button attributes
+ * Used class styles
+ * Used fixable icon
+ * Managed button attributes
  *
  */
 

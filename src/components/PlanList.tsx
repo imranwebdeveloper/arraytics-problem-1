@@ -47,8 +47,7 @@ const GridContainer = styled.div`
   gap: 16px;
   justify-content: center;
   padding: 20px;
-  max-width: 1200px;
-  margin: auto;
+  width: 100%;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);

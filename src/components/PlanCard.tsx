@@ -81,9 +81,7 @@ const PlanCard = ({
 
         <FeatureList>
           <FeatureTitle>
-            {plan.is_pro === 1
-              ? "Everything in free plus:"
-              : "Everything in free:"}
+            {plan.is_pro === 1 ? "Everything in free plus:" : "Free includes:"}
           </FeatureTitle>
           {plan.features.map((feature, index) => (
             <FeatureItem key={index}>
@@ -137,10 +135,9 @@ const Content = styled.div`
 `;
 
 const PlanTitle = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 8px;
-  /* color: #333; */
+  margin-bottom: 4px;
   text-align: start;
 `;
 
@@ -174,6 +171,7 @@ const VisitorLimit = styled.div<{ color: string }>`
   display: flex;
   text-align: center;
   white-space: nowrap;
+  justify-content: center;
   align-items: center;
   gap: 0.5rem;
 `;

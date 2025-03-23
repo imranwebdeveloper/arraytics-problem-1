@@ -1,6 +1,4 @@
-import React from "react";
-// Modified this line to use React.memo for preventing unnecessary re-renders
-const ProductList = React.memo(({ products }) => {
+const ProductList = ({ products }) => {
   console.log("ProductList rendered");
 
   return (
@@ -13,6 +11,6 @@ const ProductList = React.memo(({ products }) => {
       ))}
     </ul>
   );
-});
+};
 
 export default ProductList;
