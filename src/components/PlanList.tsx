@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 const PlanList = () => {
   const { plan, selectedPlan } = useAppSelector((state) => state.plan);
   const dispatch = useAppDispatch();
+  const colors = ["#4CB3FD", "#FFB72C", "#68CB9B", "#B78DEB"];
 
   return (
     <GridContainer>
@@ -13,13 +14,15 @@ const PlanList = () => {
         <PlanCard
           key={i}
           price={item.details[selectedPlan].price}
-          isPopular={i === 0}
+          isPopular={i === 2}
           priceLabel={item.details[selectedPlan].price_postfix}
           plan={item}
-          discountAmount={
-            selectedPlan === "2_year"
-              ? `${item.details["1_year"].price}${item.details[selectedPlan].price_postfix}`
-              : ""
+          discountLabel={
+            item.is_pro && selectedPlan === "2_year" ? (
+              <small style={{ color: "red" }}>
+                <s>{item.details["1_year"].price}</s>
+              </small>
+            ) : null
           }
           handlePlanOption={(value) => {
             dispatch(
@@ -29,6 +32,7 @@ const PlanList = () => {
               })
             );
           }}
+          color={colors[i]}
         />
       ))}
     </GridContainer>
@@ -40,7 +44,7 @@ export default PlanList;
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 16px;
   justify-content: center;
   padding: 20px;
   max-width: 1200px;

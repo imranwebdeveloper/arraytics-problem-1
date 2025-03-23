@@ -1,52 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import plan from "../assets/plan.json";
+import { Plan, PlanData, PlanState, PlanType } from "../types";
 
-type PlanType = keyof typeof plan.plansInfo;
-export type PlanData = typeof plan;
-
-interface PlanDetails {
-  price: string;
-  price_postfix: string;
-  plan_type: string;
-  plan_info: string;
-  dd_text: string;
-  btn_text: string;
-  price_id: string;
-}
-
-export interface Plan {
-  name: string;
-  price: string;
-  title: string;
-  text: string;
-  id: string | number;
-  details: {
-    [key: string]: PlanDetails;
-  };
-  planOptions: Plan[];
-  features: Feature[];
-}
-
-interface PlanInfo {
-  title: string;
-  sub_title: string;
-  discount: string;
-  type: PlanType;
-}
-
-export interface Feature {
-  is_pro: string;
-  feature_title: string;
-  feature_desc: string;
-}
-
-export interface planState {
-  plan: Plan[];
-  planInfo: PlanInfo[];
-  selectedPlan: PlanType;
-}
-
-const initialState: planState = {
+const initialState: PlanState = {
   plan: [],
   planInfo: [],
   selectedPlan: "1_year",
@@ -56,21 +11,31 @@ export const planSlice = createSlice({
   name: "plan",
   initialState,
   reducers: {
-    setPlan: (state, action: PayloadAction<typeof plan>) => {
-      const data = action.payload;
+    setPlan: (state, action: PayloadAction<PlanData>) => {
+      const { plansInfo, plans, features } = action.payload;
 
-      const planInfo = Object.entries(data.plansInfo).map(([key, value]) => ({
-        type: key as PlanType,
-        ...value,
+      // Convert plansInfo object into an array
+      const planInfo = Object.entries(plansInfo).map(([type, details]) => ({
+        type: type as PlanType,
+        ...details,
       }));
 
-      const plans = data.plans.reduce((acc: Plan[], plan, i) => {
-        const id = i + 1;
+      // Process plans and organize them into structured data
+      const formattedPlans = plans.reduce((acc: Plan[], plan, index) => {
+        const id = index + 1;
         const cleanTitle = plan.title.replace(/<\/?strong>/g, "");
-        const isExitPlan = acc.find((item) => item.name === plan.name);
+        const isFreePlan =
+          plan.details["1_year"].price === "Free" ||
+          plan.details["2_year"].price === "Free"
+            ? 0
+            : 1;
 
-        if (isExitPlan) {
-          isExitPlan.planOptions.push({
+        // Check if plan already exists
+        const existingPlan = acc.find((item) => item.name === plan.name);
+
+        if (existingPlan) {
+          // Add new plan option if plan already exists
+          existingPlan.planOptions.push({
             ...plan,
             id,
             title: cleanTitle,
@@ -78,35 +43,41 @@ export const planSlice = createSlice({
             features: [],
           });
         } else {
-          let features = [] as Feature[];
-          if (plan.price.toLowerCase() === "free") {
-            features = data.features.filter((item) => item.is_pro === "0");
-          } else {
-            features = data.features.filter((item) => item.is_pro === "1");
-          }
+          // Determine features based on plan price
+          const filteredFeatures = features
+            .map((feature) => ({
+              ...feature,
+              is_pro: Number(feature.is_pro),
+            }))
+            .filter((feature) => feature.is_pro === isFreePlan);
 
+          // Create a new plan entry
           acc.push({
             ...plan,
             id,
+            is_pro: isFreePlan,
             planOptions: [
               {
                 ...plan,
-                title: cleanTitle,
-                features: [],
-                planOptions: [],
                 id,
+                title: cleanTitle,
+                planOptions: [],
+                features: [],
               },
             ],
-            features,
+            features: filteredFeatures,
           });
         }
+
         return acc;
       }, []);
 
+      // Update state
       state.planInfo = planInfo;
-      state.plan = plans;
-      state.selectedPlan = planInfo[0].type;
+      state.plan = formattedPlans;
+      state.selectedPlan = planInfo[0]?.type;
     },
+
     setSelectedPlan: (state, action: PayloadAction<PlanType>) => {
       state.selectedPlan = action.payload;
     },
